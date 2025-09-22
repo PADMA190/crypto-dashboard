@@ -1,11 +1,11 @@
-const LoadingSkeleton =()=>{
-    return(
-        <div className="p-4 space-y-2">
-            {[...Array(5)].map((_,idx)=>(
-                <div key={idx} className="h-6 bg-gray-300 rounded animate-pulse">
-            </div>
-        ))}
+const LoadingSkeleton = () => {
+    return (
+        <div className="p-4 space-y-3">
+            {[...Array(8)].map((_, idx) => (
+                <div key={idx} className="h-5 bg-gray-200 rounded animate-pulse" />
+            ))}
         </div>
     );
 };
+
 export default LoadingSkeleton;

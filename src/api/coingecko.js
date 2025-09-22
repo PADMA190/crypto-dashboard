@@ -1,12 +1,14 @@
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_COINGECKO_BASE_URL;
+const API_BASE = import.meta.env.VITE_COINGECKO_BASE_URL || 'https://api.coingecko.com/api/v3';
+const API_KEY = import.meta.env.VITE_COINGECKO_API_KEY;
 
 export const api=axios.create(
     {
         baseURL:API_BASE,
         headers:{
             Accept:'application/json',
+            ...(API_KEY ? { 'x-cg-demo-api-key': API_KEY } : {}),
         },
     }
 );
@@ -37,7 +39,7 @@ export const fetchCoinPrices=async({page=1,per_page=50,search='',order='market_c
 //fetching trending coins data
 export const fetchTrendingCoins=async()=>{
     const { data }= await api.get('/search/trending');
-    return data.coins.maps(c => c.item);
+    return (data?.coins || []).map(c => c.item);
 }
 
 //fetching single coin details
