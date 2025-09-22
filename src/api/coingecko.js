@@ -1,0 +1,47 @@
+import axios from 'axios';
+
+const API_BASE = import.meta.env.VITE_COINGECKO_BASE_URL;
+
+export const api=axios.create(
+    {
+        baseURL:API_BASE,
+        headers:{
+            Accept:'application/json',
+        },
+    }
+);
+
+//Fetch coin prices
+export const fetchCoinPrices=async({page=1,per_page=50,search='',order='market_cap_desc'})=>{
+    const { data } = await api.get('/coins/markets',{
+        params:{
+            vs_currency:'usd',
+            order,
+            per_page,
+            page,
+            price_change_percentage: '24h',
+            sparkline:false,
+        },
+    });
+
+    if (search){
+        return data.filter(
+            coin=>
+                coin.name.toLowerCase().includes(search.toLocaleLowerCase())||
+            coin.symbol.toLowerCase().includes(search.toLowerCase())
+        );
+    }
+    return data;
+}
+
+//fetching trending coins data
+export const fetchTrendingCoins=async()=>{
+    const { data }= await api.get('/search/trending');
+    return data.coins.maps(c => c.item);
+}
+
+//fetching single coin details
+export const fetchCoinById=async (id)=>{
+    const { data } = await api.get(`/coins/${id}`);
+    return data;
+}
