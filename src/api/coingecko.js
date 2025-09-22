@@ -1,13 +1,14 @@
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_COINGECKO_BASE_URL || 'https://api.coingecko.com/api/v3';
+// Read from .env.local (Vite injects variables prefixed with VITE_). Fallback to public API.
+const API_BASE = import.meta.env.VITE_COINGECKO_BASE_URL;
 const API_KEY = import.meta.env.VITE_COINGECKO_API_KEY;
-
 export const api=axios.create(
     {
         baseURL:API_BASE,
         headers:{
             Accept:'application/json',
+            // Optional demo key header if provided in .env.local
             ...(API_KEY ? { 'x-cg-demo-api-key': API_KEY } : {}),
         },
     }
